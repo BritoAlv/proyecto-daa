@@ -1,0 +1,65 @@
+% add --shell-escape to pdflatex arguments.
+% add following key to have keyboard shortcuts
+%{
+%    "key": "shift+b",
+%    "command": "commandId",
+%    "when": "editorTextFocus"
+%},
+%{
+%"key": "shift+B",
+%"command": "editor.action.insertSnippet",
+%"when": "editorLangId == latex && editorTextFocus",
+%"args": {
+%    "snippet": "\\textbf{${TM_SELECTED_TEXT}$0}"
+%}
+%}
+
+\documentclass[14pt]{extarticle}
+\usepackage[left=2cm , right = 2cm, top=2cm]{geometry}
+\usepackage{helvet}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[spanish]{babel}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox} % above of the svg package
+\usepackage{svg} 
+\usepackage{hyperref}
+\usepackage{minted}
+\renewcommand{\sfdefault}{lmss}  % este activa la letra lmss
+\renewcommand{\familydefault}{\sfdefault} % este activa la letra lmss
+\sffamily % este activa la letra lmss
+%\hyperlink{page.2}{Go to page 2}
+%\newpage
+%text on page 2
+%\begin{figure}[htbp]
+%  \centering
+%  \includesvg{plot.svg}
+%  \caption{svg image}
+%\end{figure}
+
+%\begin{minted}{csharp}
+%    // single comment
+%    \end{minted}
+
+% f(n) = \begin{cases}
+%    n/2  & n \text{ is even} \\
+%    3n+1 & n \text{ is odd}
+%  \end{cases}
+
+%\begin{align}
+%    \frac{d}{dx} \ln x &= \lim_{h\to 0} \frac{\ln(x+h) - \ln x}{h} \\
+%    &= \ln e^{1/x} &&\text{How this follows is left as an exercise.}\\
+%    &= \frac{1}{x} &&\text{Using the definition of ln as inverse function}
+%   \end{align}
+
+
+\begin{document}
+
+\textbf{Formulación del Problema}: Dados $n$ trabajos $\{ j_1, j_2, ..., j_n  \}$, cada trabajo consiste en $s$ operaciones $\{ O_{j_1}, O_{j_2}, ..., O_{j_s} \}$ que deben ser procesadas en $m$ computadoras en ese orden satisfaciendo que hasta que una operación no sea totalmente realizada no puede comenzar la siguiente y una vez comenzada no puede ser interrumpida. La operación $O_{j_t}$ posee un tiempo requerido $T_{j_t}$ y una computadora $M_{j_t}$ en la que debe ser realizada la operación. En este ambiente, cada máquina puede procesar a lo más una operación a la vez. El objetivo es acabar todos los trabajos en el menor tiempo posible. 
+
+\textbf{Aplicaciones Prácticas del Problema}: Este problema es especialmente útil en la manufacturación, suponer que para preparar un producto (trabajo) son necesarios $s$ pasos (operaciones), cada uno de estos pasos posee un tiempo que requerirá en una máquina especifica, y ha de ser paso a paso el proceso (las operaciones siguen un orden en específico), se trata de completar todos los productos en el menor tiempo posible.  
+
+\end{document}
+
