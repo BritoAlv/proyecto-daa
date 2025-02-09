@@ -8,7 +8,9 @@
 
 Dados $n$ trabajos $J = \{j_1, j_2, ..., j_n\}$, un orden parcial $≺$ sobre $J$ (para realizar algunos trabajos, es necesario haber realizado otros previamente). Cada trabajo $i$ consiste en $s$ operaciones, $\{O_{i,1}, O_{i,2}, ..., O_{i,s}\}$ que deben ser procesadas por $m$ procesadores en ese orden. Es posible detener la ejecución de una operación, con un costo de tiempo $C_{i,j}$ para la operación $j$ del trabajo $i$. Cada operación posee un porcentaje de progreso por unidad de tiempo por procesador dado por $T_{i, j, k} \in \{1, 2, 3, ..., 100\}$ (porcentaje de progreso por unidad de tiempo de la operación $j$ del trabajo $i$ en el procesador $k$). Nótese que cada procesador puede procesar a lo sumo una operación a la vez. El objetivo es **acabar todos los trabajos en el menor tiempo posible**.
 
-**Nota**: Se asume que el tiempo es entero no negativo
+**Notas**: 
+- Se asume que el tiempo es entero no negativo
+- Ver *Anexos* para ejemplos de entrada y salida
 
 ### Motivaciones
 
@@ -217,6 +219,48 @@ Asumiendo que, para $0 \leq k \leq m$, si $T \in \mathcal{X}_k$ y $T' \in \mathc
 
 ## Solución propuesta para (P0)
 
+Dado que (P0) es NP-Completo, podemos afirmar que es un problema **intratable**, por lo que para resolverlo de manera eficiente solo podemos aspirar a utilizar aproximaciones y heurísticas. En la literatura podemos encontrar numerosas estrategias para resolver problemas muy relacionados (Jop Shop Scheduling -JSP- [3] es uno de ellos) como: *Priority rules*, *The shifting bottleneck heuristic*, *Opportunistic Scheduling*, *Métodos de búsqueda local* y *Métodos basados en algoritmos genéticos (GA)*.
+
+Dada la complejidad de nuestro problema, comparado con JSP (el cual podría considerarse como un caso particular, realizando pequeños ajustes) y la flexibilidad que brindan los GA, decidimos optar por un enfoque basado en estos para construir un algoritmo aproximado para (P0).
+
+### Algoritmo
+
+Utilizando el marco de los GA [4]:
+
+```pseudo
+function GENETIC-ALGORITHM(population, fitness)
+    repeat
+        weights ← WEIGHTED-BY(population, fitness)
+        population2 ← empty list
+        for i = 1 to SIZE( population) do
+            parent1, parent2 ← WEIGHTED-RANDOM-CHOICES(population, weights, 2)
+            child ← REPRODUCE (parent1, parent2)
+            if (small random probability) then child ← MUTATE(child)
+            add child to population2
+            population ← population2
+    until some individual is ﬁt enough, or enough time has elapsed
+    return the best individual in population, according to fitness
+```
+
+, necesitamos definir para nuestro problema la **codificación** de los individuos de la población, una función **fitness**, la función **REPRODUCE** (Crossover or Recombinación) y la función **MUTATE**
+
+#### Codificación
+
+#### Mutación
+
+#### Recombinación
+
+#### Fitness 
+
+## Referencias bibliográficas
+
+- [1] Ullman, J. D. (1975). NP-complete scheduling problems. Journal of Computer and System Sciences, 10(3), 384–393. https://doi.org/10.1016/S0022-0000(75)80008-0
+- [2] Coffman, E. G., & Graham, R. L. (1972). Optimal scheduling for two-processor systems. Acta Informatica, 1(3), 200–213. https://doi.org/10.1007/BF00288685
+- [3] Błażewicz, J., Domschke, W., & Pesch, E. (1996). The job shop scheduling problem: Conventional and new solution techniques. European Journal of Operational Research, 93(1), 1–33. https://doi.org/10.1016/0377-2217(96)00030-3
+- [4] Russell, S. J., & Norvig, P. (2020). Artificial intelligence: A modern approach (4th ed.). Pearson.
+
+## Anexos
+
 ### Entrada
 
 - Un diccionario con *trabajo* como llave y como valor los *trabajos de los que depende*.
@@ -279,9 +323,3 @@ Una lista en la que cada índice representa un *procesador* y sus elementos cons
     [((6, 9), (1, 2)), ((15, 17), (1, 3)), ((23, 28), (4, 1))],
 ]
 ```
-
-## Referencia bibliográficas
-
-- [1] Ullman, J. D. (1975). NP-complete scheduling problems. Journal of Computer and System Sciences, 10(3), 384–393. https://doi.org/10.1016/S0022-0000(75)80008-0
-- [2] Coffman, E. G., & Graham, R. L. (1972). Optimal scheduling for two-processor systems. Acta Informatica, 1(3), 200–213. https://doi.org/10.1007/BF00288685
-- [3] Błażewicz, J., Domschke, W., & Pesch, E. (1996). The job shop scheduling problem: Conventional and new solution techniques. European Journal of Operational Research, 93(1), 1–33. https://doi.org/10.1016/0377-2217(96)00030-3
