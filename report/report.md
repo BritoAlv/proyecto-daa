@@ -14,7 +14,7 @@ Dados $n$ trabajos $J = \{j_1, j_2, ..., j_n\}$, un orden parcial $≺$ sobre $J
 
 Una solución al problema dado puede tener mucha utilidad en la práctica; dado que numerosos procesos computacionales pueden ser modelados de esta manera. Por ejemplo: un proceso compuesto por varios programas (*trabajos*) relacionados por un orden, que a su vez están compuestos por una cantidad finita y secuencial de instrucciones (*operaciones*), cada uno de los cuales debe ser ejecutado en un conjunto de computadoras (procesadores) y además existe el costo de hacer un cambio de contexto (*costo de interrupción*); puede darse el caso, incluso, que algunas instrucciones son ejecutadas de manera más eficiente en algunas computadoras que en otras.
 
-## Análisis de Complejidad
+## Análisis de Complejidad [1]
 
 **Nota**: En esta sección trabajaremos con la versión de **"decisión"** de (P0), es decir, la versión en la que existe además un tiempo límite $t$ y la pregunta es: ¿es posible terminar todos los trabajos antes de $t$?.
 
@@ -142,7 +142,7 @@ Notemos que (P1) es un caso particular de (P3) donde $p = 100$.
 
 ■
 
-### Problema (P4) (Tiempo de ejecución unitario con solo dos procesadores)
+### Problema (P4) (Tiempo de ejecución unitario con solo dos procesadores) [2]
 
 #### Definición
 
@@ -282,6 +282,6 @@ Una lista en la que cada índice representa un *procesador* y sus elementos cons
 
 ## Referencia bibliográficas
 
-- [1]
-- [2]
-- [3]
+- [1] Ullman, J. D. (1975). NP-complete scheduling problems. Journal of Computer and System Sciences, 10(3), 384–393. https://doi.org/10.1016/S0022-0000(75)80008-0
+- [2] Coffman, E. G., & Graham, R. L. (1972). Optimal scheduling for two-processor systems. Acta Informatica, 1(3), 200–213. https://doi.org/10.1007/BF00288685
+- [3] Błażewicz, J., Domschke, W., & Pesch, E. (1996). The job shop scheduling problem: Conventional and new solution techniques. European Journal of Operational Research, 93(1), 1–33. https://doi.org/10.1016/0377-2217(96)00030-3
