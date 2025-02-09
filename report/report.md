@@ -4,7 +4,7 @@
 - Álvaro Luis González Brito C-412
 - Javier Lima García C-412
 
-## Definición del problema central (P0)
+## Definición del problema central (P0) (Job Scheduling)
 
 Dados $n$ trabajos $J = \{j_1, j_2, ..., j_n\}$, un orden parcial $≺$ sobre $J$ (para realizar algunos trabajos, es necesario haber realizado otros previamente). Cada trabajo $i$ consiste en $s$ operaciones, $\{O_{i,1}, O_{i,2}, ..., O_{i,s}\}$ que deben ser procesadas por $m$ procesadores en ese orden. Es posible detener la ejecución de una operación, con un costo de tiempo $C_{i,j}$ para la operación $j$ del trabajo $i$. Cada operación posee un porcentaje de progreso por unidad de tiempo por procesador dado por $T_{i, j, k} \in \{1, 2, 3, ..., 100\}$ (porcentaje de progreso por unidad de tiempo de la operación $j$ del trabajo $i$ en el procesador $k$). Nótese que cada procesador puede procesar a lo sumo una operación a la vez. El objetivo es **acabar todos los trabajos en el menor tiempo posible**.
 
@@ -20,14 +20,14 @@ Una solución al problema dado puede tener mucha utilidad en la práctica; dado 
 
 Para analizar la complejidad temporal de (P0), enfoquémonos en los siguientes casos particulares.
 
-### Definición (P1)
+### Definición (P1) (Tiempo de ejecución unitario)
 
 Dada la definición de (P0), añadamos las siguientes restricciones:
 
-- El porcentaje de progreso por tiempo es 100 para todas las operaciones por cada procesador ($T_{i, j, k} = 100, \space \forall i, j, k$). En otras palabras las operaciones tienen una *duración de una unidad de tiempo*, independientemente del procesador en la que sea ejecutada. De esta restricción podemos deducir que el costo de interrupción es despreciable.
+- El porcentaje de progreso por unidad de tiempo es 100 para todas las operaciones por cada procesador ($T_{i, j, k} = 100, \space \forall i, j, k$). En otras palabras las operaciones tienen una *duración de una unidad de tiempo*, independientemente del procesador en la que sea ejecutada. De esta restricción podemos deducir que el costo de interrupción es despreciable.
 - Todos los trabajos presentan solo una operación, $s_1 = s_2 = ... = s_n$.
 
-### Definición (P2)
+### Definición (P2) (Tiempo de ejecución unitario con cantidad variable de procesadores)
 
 Dada la definición de (P1), añadamos la restricción de que la cantidad de procesadores es variable con el tiempo, $c_0, c_1, ..., c_{t-1}$ tal que $\sum_{i = 0}^{t-1} c_i = n$, donde $c_i$ es la cantidad de procesadores en el instante $i$.
 
@@ -120,11 +120,30 @@ Por **Lema 1**, **Lema 2** y que 3SAT $\in$ NP-Completo
 
 ### Corolario 1: (P0) es NP-Completo
 
-Por ser (P1) un caso particular de (P0)
+Al ser (P1) un caso particular de (P0)
 
 ■
 
 ## Análisis de casos particulares
+
+### Problema (P3) (Simple preemptive scheduling)
+
+#### Definición
+
+Dada la definición de (P0), añadamos las siguientes restricciones:
+
+- $\forall i, j \space \exists p$ tal que $T_{i, j, k} = p, \space \forall k$. Es decir dada una operación su porcentaje de progreso por unidad de tiempo es el mismo para todos los procesadores
+- Todos los trabajos presentan solo una operación, $s_1 = s_2 = ... = s_n$.
+- El costo de interrupción es despreciable
+
+#### Teorema 2: (P3) es NP-Completo
+
+Notemos que (P1) es un caso particular de (P3) donde $p = 100$.
+
+■
+
+### Problema (P4) ()
+
 
 ## Solución propuesta para (P0)
 
