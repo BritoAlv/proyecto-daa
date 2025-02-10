@@ -216,6 +216,64 @@ El núcleo de la demostración del teorema está contenido en el hecho de que, p
 
 Asumiendo que, para $0 \leq k \leq m$, si $T \in \mathcal{X}_k$ y $T' \in \mathcal{X}_{k+1}$, entonces $T' ≺ T$, entonces lo que resta es un paso corto para una prueba del teorema. Para una lista arbitraria $L$, todas las tareas en $\mathcal{X}_{k+1}$ deben ejecutarse antes de que cualquier tarea en $\mathcal{X}_k$ pueda comenzar. Dado que $\mathcal{X}_{k+1}$ consiste en $2n_{k+1} - 1$ tareas, esto requerirá al menos $n_{k+1}$ unidades de tiempo. Así, ejecutar $G$ requerirá al menos $\sum_{k=0}^{m} n_k$ unidades de tiempo, sin importar qué lista $L$ se use. Dado que $\omega(L^*) = \sum_{k=0}^{m} n_k$ hemos demostrado $\omega(L) \geq \omega(L^*)$ y la prueba está completa.
 
+### Problema (P5) (Tiempo de ejecución unitario con múltiples procesadores)
+
+#### Definición
+Dado un conjunto de *m* procesadores idénticos, se debe planificar la ejecución de *n* trabajos. Cada trabajo *i* tiene las siguientes características:
+
+*   **Tiempo de Ejecución:** *tᵢ* segundos (unidades de tiempo). Debido a que el progreso es uniforme en todos los trabajos y procesadores, el costo se expresa directamente en unidades de tiempo.
+*   **Intervalo de Tiempo Permitido:** Definido por un inicio *sᵢ* y un fin *eᵢ*, donde *sᵢ* ≤ *eᵢ*. El trabajo *i* debe completarse dentro de este intervalo \[*sᵢ*, *eᵢ*].
+*   **Independencia:** Ningún trabajo depende de la finalización de otro; es decir, no existen precedencias entre los trabajos.
+*   **Interrupción Despreciable:** El tiempo de interrupción y cambio de contexto entre los trabajos es considerado insignificante.
+
+El objetivo es determinar si es posible ejecutar todos los *n* trabajos, cumpliendo con las restricciones de tiempo dadas, y en caso afirmativo, determinar un orden de ejecución factible.
+
+**Reformulación Basada en Flujos:**
+
+Para resolver este problema, se propone una solución basada en el modelado del problema como un grafo de flujo.
+
+**Construcción del Grafo:**
+
+El grafo *G* = (*V*, *E*) se construye de la siguiente manera:
+
+*   **Conjunto de Vértices (V):**
+    *   *S*: Nodo fuente (inicio).
+    *   *T*: Nodo sumidero (fin).
+    *   *R* = {*r₁*, *r₂*, ..., *rₖ*}: Representantes de los intervalos de tiempo. Donde {*a₁*, *a₂*, ..., *aₖ*} es el conjunto ordenado de todos los valores únicos de *sᵢ* y *eᵢ* para todo *i*. Cada *rᵢ* representa el intervalo \[*aᵢ₋₁*, *aᵢ*\].
+    *   *V* = {*v₁*, *v₂*, ..., *vₙ*}: Representantes de los trabajos, donde *vᵢ* representa el trabajo *i*.
+
+*   **Conjunto de Aristas (E) y Capacidades:**
+    *   **Aristas S -> *rᵢ***: Conectan el nodo fuente *S* a cada nodo representante de intervalo *rᵢ*.
+        *   Capacidad: *m* \* (*aᵢ* - *aᵢ₋₁*). Esto representa la capacidad total de los *m* procesadores para trabajar en el intervalo de tiempo \[*aᵢ₋₁*, *aᵢ*\].
+    *   **Aristas *rᵢ* -> *vⱼ***: Conectan cada nodo representante de intervalo *rᵢ* a un nodo representante de trabajo *vⱼ* si el intervalo \[*aᵢ₋₁*, *aᵢ*\] está contenido dentro del intervalo de tiempo permitido para el trabajo *j*, es decir, si *sⱼ* ≤ *aᵢ₋₁* y *aᵢ* ≤ *eⱼ*.
+        *   Capacidad: (*aᵢ* - *aᵢ₋₁*). Esto representa la cantidad de tiempo que el trabajo *j* puede ser procesado en el intervalo \[*aᵢ₋₁*, *aᵢ*\].
+    *   **Aristas *vᵢ* -> *T***: Conectan cada nodo representante de trabajo *vᵢ* al nodo sumidero *T*.
+        *   Capacidad: *tᵢ*. Esto representa el tiempo total necesario para completar el trabajo *i*.
+
+**Verificación de Factibilidad:**
+
+La ejecución de todos los trabajos es factible si y solo si el flujo máximo en el grafo *G* es igual a la suma de los tiempos de ejecución de todos los trabajos:
+
+```
+flujo_maximo(G) == Σ tᵢ  para i = 1 hasta n
+```
+
+Si esta condición se cumple, entonces existe una asignación de trabajos a intervalos de tiempo que satisface todas las restricciones.
+
+**Determinación del Orden de Ejecución:**
+
+Una vez que se ha encontrado un flujo máximo válido, se puede determinar el orden de ejecución de los trabajos analizando el flujo en las aristas *rᵢ* -> *vⱼ*. Si existe flujo en la arista (*rᵢ*, *vⱼ*), significa que el trabajo *j* está siendo procesado durante el intervalo de tiempo \[*aᵢ₋₁*, *aᵢ*\]. La cantidad de flujo en esta arista indica la duración de tiempo que el trabajo *j* está siendo procesado en ese intervalo.
+
+**Algoritmo para Calcular el Flujo Máximo:** Para resolver el problema de flujo máximo en este grafo, se puede utilizar un algoritmo como **Ford-Fulkerson** o **Edmonds-Karp**. Estos algoritmos garantizan encontrar el flujo máximo en un grafo.
+
+**Complejidad:**
+
+*   **Construcción del Grafo:** O(*n²*) en el peor caso, debido a la necesidad de comparar los intervalos de tiempo de cada trabajo con todos los demás. Sin embargo, se puede optimizar a O(*n log n*) si se ordenan los intervalos primero.
+*   **Algoritmo de Flujo Máximo (Ford-Fulkerson):** O(*E* \* *f*), donde *E* es el número de aristas y *f* es el flujo máximo. En este caso, *f* = Σ *tᵢ*.
+*   **Algoritmo de Flujo Máximo (Edmonds-Karp):** O(*V* \* *E*²), donde *V* es el número de vértices y *E* es el número de aristas.
+
+La complejidad total dependerá del algoritmo de flujo máximo utilizado. En general, se prefiere **Edmonds-Karp** para garantizar una complejidad polinómica.
+
 
 ## Solución propuesta para (P0)
 
