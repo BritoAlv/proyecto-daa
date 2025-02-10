@@ -265,7 +265,35 @@ Si seleccionamos a $c_1$ y tomamos su prefijo [4, 5] $\implies$ [4, 5, 6, 8, 7]
 
 **Nota**: Utilizamos enteros para representar operaciones en este ejemplo por motivos de simplicidad, en la práctica es necesario utilizar tuplas.
 
-#### Fitness 
+#### Fitness
+
+El pseudocódigo de la función fitness es el siguiente:
+
+```pseudo
+function fitness(permutation)
+    solution = []
+    execution_list = [(operation, 0) for operation in permutation]
+    repeat
+        temp_execution_list = []
+        for tuple in execution_list:
+            if can_execute(element) and can_interrupt(solution, tuple):
+                interrupted = best_interrupt(solution, tuple)
+                temp_execution_list.append(tuple)
+            else:
+                temp_execution_list.append(tuple)
+        execution_list = temp_execution_list
+    until execution_list is empty
+
+    return 1 / latest_interval(solution)
+```
+
+Dado una permutación el objetivo de *fitness* es calcular su fitness, valga la redundancia. Para alcanzarlo este se apoya de una **heurística greedy**. Primero construye una **lista de ejecución** cuyos elementos son tuplas -operación, progreso-, (inicialmente el progreso es 0 -una operación finaliza cuando su progreso es 100-). A continuación recorre la lista de ejecución y por cada tupla verifica si su operación es **ejecutable** -can_execute- (una operación es ejecutable si todas las operaciones predecesoras han finalizado -operaciones de su trabajo como de trabajos predecesores-) y si puede **interrumpir** -can_interrupt- a algunas de las últimas operaciones dispuestas por procesador en la solución actual; si ambas condiciones son alcanzadas entonces se interrumpe (y es añadida a la próxima lista de ejecución) la última operación de uno de los procesadores que conduce al menor tiempo de ejecución -best_interrupt- (*greedy approach*). Notemos que interrumpir implica interrumpir directamente o sustituir a dicha operación.
+
+Al finalizar el while (repeat-until en este caso) tenemos una solución factible (garantizado por *can_execute*), de la cual podemos conocer su tiempo de ejecución total, a partir de la operación más tardía de las últimas operaciones por procesador -latest_interval-
+
+Notemos que durante cada iteración del while, disminuye en al menos un elemento la lista de ejecución; además la complejidad de *can_execute* puede ser $O(1)$ si mantenemos una estructura de tipo diccionario durante cada iteración del while (complejidad $O(n)$), la complejidad de *can_interrupt* es $O(m)$ y la de latest_interval es $O(m)$. De ahí que la complejidad de **fitness** es:
+
+$\sum_{i = 0}^{l - 1} m(l - i) + n = ml^2 + nl \space \implies \space O(ml^2 + nl)$, donde $l$ representa la cantidad total de operaciones.
 
 ## Referencias bibliográficas
 
