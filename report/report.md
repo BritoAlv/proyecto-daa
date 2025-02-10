@@ -246,9 +246,24 @@ function GENETIC-ALGORITHM(population, fitness)
 
 #### Codificación
 
+Un individuo (scheduling) está codificado como una **permutación** de todas las operaciones existentes.
+
 #### Mutación
 
+Diseñamos una mutación como el intercambio de posiciones de dos operaciones en una permutación
+
 #### Recombinación
+
+Para recombinar dos codificaciones (permutaciones) seleccionamos de manera aleatoria a una de estas, de la cual tomamos un prefijo de longitud también aleatoria como prefijo de la recombinación resultante, a esta última la completamos con los elementos de la codificación que no fue utilizada para extraer el prefijo (manteniendo el orden original). Notemos que esta forma de recombinación garantiza que la codificación resultante es válida.
+
+Ejemplo:
+
+- $c_1$: [4, 5, 6, 7, 8]
+- $c_2$: [6, 5, 4, 8, 7]
+
+Si seleccionamos a $c_1$ y tomamos su prefijo [4, 5] $\implies$ [4, 5, 6, 8, 7]
+
+**Nota**: Utilizamos enteros para representar operaciones en este ejemplo por motivos de simplicidad, en la práctica es necesario utilizar tuplas.
 
 #### Fitness 
 
