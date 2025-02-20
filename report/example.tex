@@ -95,56 +95,63 @@ Una solución al problema dado puede tener mucha utilidad en la práctica; dado 
 
 Para analizar la complejidad temporal de (P0), enfoquémonos en los siguientes casos particulares.
 
-\subsubsection*{Definición (P1) (Tiempo de ejecución unitario)}
+\subsubsection*{Definición (P1) (Tiempo de ejecución unitario y Una Operación)}
 
-Dada la definición de (P0), añadamos las siguientes restricciones:
+Dada la definición de (P0), añadimos las siguientes restricciones:
 
 \begin{itemize}
-    \item El porcentaje de progreso por unidad de tiempo es 100 para todas las operaciones por cada procesador ($T_{i, j, k} = 100, \space \forall i, j, k$). En otras palabras las operaciones tienen una \textit{duración de una unidad de tiempo}, independientemente del procesador en la que sea ejecutada. De esta restricción podemos deducir que el costo de interrupción es despreciable.
+    \item El porcentaje de progreso por unidad de tiempo es $100$ para todas las operaciones por cada procesador ($T_{i, j, k} = 100, \space \forall i, j, k$). En otras palabras las operaciones tienen una \textit{duración de una unidad de tiempo}, independientemente del procesador en la que sea ejecutada. Como no tiene sentido interrumpir una operacion, se puede asumir que los costos de interrupcion son despreciables.
     \item Todos los trabajos presentan solo una operación, $s_1 = s_2 = \ldots = s_n$.
 \end{itemize}
 
 \subsubsection*{Definición (P2) (Tiempo de ejecución unitario con cantidad variable de procesadores)}
 
-Dada la definición de (P1), añadamos la restricción de que la cantidad de procesadores es variable con el tiempo, $c_0, c_1, \ldots, c_{t-1}$ tal que $\sum_{i = 0}^{t-1} c_i = n$, donde $c_i$ es la cantidad de procesadores en el instante $i$.
+Dada la definición de (P1), añadamos la restricción de que la cantidad de procesadores es variable con el tiempo. 
 
-En lo que sigue asumimos que los problemas están codificados de tal forma que la longitud del string representativo de un problema de $n$ trabajos es polinomial en $n$ o al menos $O(n)$. Asumimos, además, que la codificación (encoding) es lo suficientemente natural para que los trabajos, la relación $\prec$, etc., puedan ser determinados de manera sencilla y por supuesto en tiempo polinomial.
+$c_0, c_1, \ldots, c_{t-1}$ tal que $\sum_{i = 0}^{t-1} c_i = n$, donde $c_i$ es la cantidad de procesadores en el instante $i$. Recordar que la pregunta es si es posible completar las tareas en $t$ unidades de tiempo. 
+
+Tener en cuenta que es posible esta formulacion porque el tiempo de ejecución de cada tarea es unitario. 
+
+En lo que sigue asumimos que los problemas están codificados de tal forma que la longitud del string representativo de un problema de $n$ trabajos es polinomial en $n$ o al menos $O(n)$. 
+
+Asumimos, además, que la codificación (encoding) es lo suficientemente natural para que los trabajos, la relación $\prec$, etc., puedan ser determinados de manera sencilla y por supuesto en tiempo polinomial.
 
 \subsubsection*{Lema 1: (P2) se transforma polinomialmente en (P1)}
 
 \textbf{Demostración}:
 
-Dada una instancia de (P2), introduzcamos nuevos trabajos $I_{ij}$ para $0 \leq i < t$ y $0 \leq j \leq n - c_i$. Mantengamos a los antiguos trabajos relacionados por $\prec$ y añadamos $I_{ij} \prec I_{i-1, k}$ para $0 \leq i < t - 1$ con $j$ y $k$ arbitrarios. Si seleccionamos $n + 1$ procesadores y un tiempo límite $t$, tenemos una instancia de (P1).
+Dada una instancia de (P2), introduzcamos nuevos trabajos $I_{ij}$ para $0 \leq i < t$ y $0 \leq j \leq n - c_i$. Mantengamos a los antiguos trabajos relacionados por $\prec$ y añadamos $I_{ij} \prec I_{i+1, k}$ para $0 \leq i < t - 1$ con $j$ y $k$ arbitrarios. Si seleccionamos $n + 1$ (porque de $0$ a $n - c_i$ hay $n - c_i + 1$ trabajos) procesadores y un tiempo límite $t$, tenemos una instancia de (P1).
 
-\textbf{Observación}:
+La idea es forzar a que estos trabajos que se anadieron se tengan que ejecutar en los $n +1 - c_i$ procesadores para avanzar a la siguiente ronda, quedando $c_i$ procesadores libres, ese instante de tiempo, que es la misma situacion que ocurre en $P_2$.
 
-\textit{En cualquier solución, exactamente $n + 1 - c_i$ de los nuevos trabajos deben ser ejecutados en la iésima unidad de tiempo.}
+Asumir que el trabajo $I_{jk}$ se ejecuta en el momento $l < k$, entonces para poder haberlo hecho se tuvieron que haber realizado todos los trabajos de los que el depende, esto requiere 
 
-Por motivos de contradicción, supongamos que las tareas $I_{kj}$ para un $k < t - 1$ y $0 \leq j \leq n - c_k$ son ejecutadas en la unidad de tiempo $k + 1$.
+$$\sum_{i = 0}^{k-1} (n+1 - c_i)$$
 
-Sea $|{J_{k+1}, \ldots, J_{t-1}}| = p$, entonces tendremos que realizar un total de:
+Trabajos realizados previamente, y por tanto unidades de tiempo, pero el trabajo de procesadores disponible es a lo mas:
 
-\begin{align*}
-\sum_{i = k + 1}^{t - 1} n + 1 - c_i = p (n + 1) + (c_{k+1}, \ldots, c_{t-1}) \geq p(n + 1) - n = pn + p - n
-\end{align*}
+$$\sum_{i= 0}^{l -1} (n+1)$$
 
-operaciones en:
+Por lo que se debe cumplir que:
 
-\begin{align*}
-(p - 1)(n + 1) = pn + p - n - 1
-\end{align*}
 
-procesadores.
+$$\sum_{i= 0}^{l -1} (n+1) \geq \sum_{i = 0}^{k-1} (n+1 - c_i)$$
+
+Esto es absurdo porque:
 
 \begin{align*}
-pn + p - n - 1 < pn + p - n,
+    \sum_{i= 0}^{l -1} (n+1) - \sum_{i = 0}^{k-1} (n+1 - c_i) &= (l-k)(n+1) + \sum_{i = 0}^{k-1} c_i \\
+    &\leq -(n+1) + \sum_{i = 0}^{k-1} c_i
+    &< 0
 \end{align*}
 
-una \textbf{contradicción} (la cantidad de operaciones supera a la cantidad de procesadores).
+El último paso es justificado porque: $\sum_{i = 0}^{k-1} c_i \leq n$. Esto es porque todas las tareas suman $n$, y esto es un subconjunto de ellas. 
 
-$\therefore$ (P1) tiene una solución si y solo si la instancia original de (P2) tiene solución.
+Esto demuestra que el tiempo del nuevo trabajo es al menos $I_{ik}$ tienen que ser al menos $k$, análogamente se puede demostrar que es a lo más $k$, por tanto la conclusion es que todos los tiempos son exactamente $k$.
 
-Claramente, la complejidad temporal de construir una instancia de (P1) es a lo sumo cuadrática en la longitud de la representación de (P2). Luego, (P2) puede ser transformado polinomialmente en (P1).
+Con esto se concluye que una solucion de esta problema de $\therefore$ (P1) es una solucion valida de $P2$, que es lo que se quiere demostrar.
+
+La complejidad temporal de construir una instancia de (P1) es a lo sumo cuadrática respecto a la longitud de la representación de (P2). Luego, (P2) puede ser transformado polinomialmente en (P1). Debido a la arbitrariedad a la hora de construir el orden parcial, esto requiere que sea cuadrática.
 
 $\blacksquare$
 
