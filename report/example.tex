@@ -15,7 +15,7 @@
 %}
 
 \documentclass[14pt]{extarticle}
-\usepackage[left=2cm , right = 2cm, top=2cm]{geometry}
+\usepackage[left=0.5cm , right = 0.5cm, top=0.5cm]{geometry}
 \usepackage{helvet}
 \usepackage{parskip}
 \usepackage{amsmath}
@@ -60,14 +60,24 @@
 \section*{Job Scheduling. Diseño y Análisis de Algoritmos}
 
 \begin{itemize}
-    \item Álvaro Suárez Valdés C-412
+    \item Álbaro Suárez Valdés C-412
     \item Álvaro Luis González Brito C-412
     \item Javier Lima García C-412
 \end{itemize}
 
 \subsection*{Definición del problema central (P0) (Job Scheduling)}
 
-Dados $n$ trabajos $J = \{j_1, j_2, \ldots, j_n\}$, un orden parcial $\prec$ sobre $J$ (para realizar algunos trabajos, es necesario haber realizado otros previamente). Cada trabajo $i$ consiste en $s$ operaciones, $\{O_{i,1}, O_{i,2}, \ldots, O_{i,s}\}$ que deben ser procesadas por $m$ procesadores en ese orden. Es posible detener la ejecución de una operación, con un costo de tiempo $C_{i,j}$ para la operación $j$ del trabajo $i$. Cada operación posee un porcentaje de progreso por unidad de tiempo por procesador dado por $T_{i, j, k} \in \{1, 2, 3, \ldots, 100\}$ (porcentaje de progreso por unidad de tiempo de la operación $j$ del trabajo $i$ en el procesador $k$). Nótese que cada procesador puede procesar a lo sumo una operación a la vez. El objetivo es \textbf{acabar todos los trabajos en el menor tiempo posible}.
+Dados $n$ trabajos $J = \{j_1, j_2, \ldots, j_n\}$, un orden parcial $\prec$ sobre $J$ (porque para realizar algunos trabajos, es necesario haber realizado otros previamente, esto ha de crear un DAG). 
+
+Cada trabajo $i$ consiste en $s$ operaciones, $\{O_{i,1}, O_{i,2}, \ldots, O_{i,s}\}$ que pueden ser procesadas por alguno de cualesquiera $m$ procesadores en ese orden. 
+
+Es posible detener la ejecución de una operación, con un costo de tiempo $C_{i,j}$ para la operación $j$ del trabajo $i$. Esto significa que ese procesador no va a estar disponible esas unidades de tiempo.
+
+Cada operación posee un porcentaje de progreso por unidad de tiempo por procesador dado por $T_{i, j, k} \in \{1, 2, 3, \ldots, 100\}$ (porcentaje de progreso por unidad de tiempo de la operación $j$ del trabajo $i$ en el procesador $k$). O sea si esa operacion $j$ es ejecutada en el procesador $k$ una unidad de tiempo su progeso aumentara en ese valor. Cuando su progreso sea al menos $100$, es dada por completada. Y se puede pasar a la siguiente operacion. 
+
+Cada procesador puede procesar a lo sumo una operación a la vez. 
+
+El objetivo es \textbf{acabar todos los trabajos en el menor tiempo posible}.
 
 \textbf{Notas}:
 \begin{itemize}
@@ -77,7 +87,7 @@ Dados $n$ trabajos $J = \{j_1, j_2, \ldots, j_n\}$, un orden parcial $\prec$ sob
 
 \subsection*{Motivaciones}
 
-Una solución al problema dado puede tener mucha utilidad en la práctica; dado que numerosos procesos computacionales pueden ser modelados de esta manera. Por ejemplo: un proceso compuesto por varios programas (\textit{trabajos}) relacionados por un orden, que a su vez están compuestos por una cantidad finita y secuencial de instrucciones (\textit{operaciones}), cada uno de los cuales debe ser ejecutado en un conjunto de computadoras (procesadores) y además existe el costo de hacer un cambio de contexto (\textit{costo de interrupción}); puede darse el caso, incluso, que algunas instrucciones son ejecutadas de manera más eficiente en algunas computadoras que en otras.
+Una solución al problema dado puede tener mucha utilidad en la práctica; dado que numerosos procesos computacionales pueden ser modelados de esta manera. Por ejemplo: un proceso compuesto por varios programas (\textit{trabajos}) relacionados por un orden, que a su vez están compuestos por una cantidad finita y secuencial de instrucciones (\textit{operaciones}), cada uno de los cuales debe ser ejecutado en un conjunto de computadoras (procesadores) y además existe el costo de hacer un cambio de contexto (\textit{costo de interrupción}); puede darse el caso, incluso, que algunas instrucciones sean ejecutadas de manera más eficiente en algunas computadoras que en otras.
 
 \subsection*{Análisis de Complejidad [1]}
 
